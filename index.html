@@ -6,99 +6,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-      <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+39+Text|Merriweather" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+39+Text|Merriweather" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/main.css" type="text/css" />
   </head>
+  
   <body>
-
-    <header>
-      <nav class="navbar navbar-inverse">
+<!--    HEADER-->
+    <header id="top">
+      <!-- NAVBAR -->
+      <nav class="navbar">
         <div class="container-fluid">
           <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+            <div class="navbar-inverse">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
               <span class="sr-only">Toggle navigation</span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
-            </button>
+              </button>
+            </div>
+            
             <a class="navbar-brand" routerLink="/home"> NodeGG </a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-            </ul>
             <ul class="nav navbar-nav  navbar-right">
-              <li class="" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                <a class="" routerLink="/home"> Home</a>
-              </li>
-              <li class="" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" >
-                <a class="" routerLink="/dashboard">Dashboard</a>
-              </li>
-              <li class="">
-                <a class="" target="_blank" href="https://github.com/TeamKhonsu/TheKhovfePub">Source Code</a>
-              </li>
-              <li class="">
-                <a class="" href="#Profile">Profile</a>
-              </li>
-              <li class="">
-                <a class="" href="#Feed">Feed</a>
-              </li>
-              <li class="">
-                <a class="" href="#Login">Login</a>
-              </li>
-              <li class="">
-                <a class="" href="#Logout">Logout</a>
-              </li>
-              <li class="">
-                <a class="" href="#Register">Register</a>
-              </li>
+              <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/">Home</a></li>
+              <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/dashboard">Dashboard</a></li>
+              <li><a *ngIf="authService.loggedIn()" routerLink="/profile">Profile</a></li>
+
+              <li><a *ngIf="!authService.loggedIn()" routerLink="/login">Login</a></li>
+              <li><a *ngIf="authService.loggedIn()" href="#" (click)="onLogoutClick()">Logout</a></li>
+              <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/register">Register</a></li>
             </ul>
           </div>
         </div>
       </nav>
       <!-- NAVBAR END -->
-    </header>
-      <!-- Wrap -->
-      <!-- JUMBOTRON -->
-      <div id="top" class="jumbotron jumboHome overlay" >
 
-        <h1>NodeGG</h1>
+<!--    HEADER END-->
+    <!-- Wrap -->
+    <!-- JUMBOTRON -->
+    <div class="jumboHome" >
 
-      </div>
-      <!-- JUMBOTRON END -->
-      <!-- Wrap -->
-      <div class="container">
+      <h1>NodeGG</h1>
+
+    </div>
+    <!-- JUMBOTRON END -->
+  </header>
+    <!-- Wrap -->
+    
+      
       <!-- TWITCH -->
-        <div id="Twitch">
-          <div class="card">
-            <div class="card-header">
-              <div class="twitch">
-                <div id="twitch-embed" class="container-fluid">
-                  <!-- <iframe
-                    src="http://player.twitch.tv/?channel={CHANNEL}"
-                    height="100%"
-                    width="100%"
-                    frameborder="0"
-                    scrolling="no"
-                    allowfullscreen="true">
-                </iframe> -->
-
-                  <!-- <iframe src="https://player.twitch.tv/?channel=relaxbeats" frameborder="0" allowfullscreen="true" scrolling="no" height="100%" width="100%"></iframe> -->
-                </div>
-                <!-- <div class="twitch-chat">
-                  <iframe frameborder="0"
-                          scrolling="no"
-                          id="chat embed"
-                          src="http://www.twitch.tv/relaxbeats/chat"
-                          height=100%
-                          width="100%">
-                  </iframe>
-                </div> -->
-              </div>
-            </div>
-          </div>
+      <div id="Twitch">  
+        <div class="twitch">
+          <div id="twitch-embed" class="container-fluid"></div>
+          <!-- <div class="twitch-chat">
+            <iframe frameborder="0"
+            scrolling="no"
+            id="chat embed"
+            src="http://www.twitch.tv/relaxbeats/chat"
+            height=100%
+            width="100%">
+            </iframe>
+            </div> -->
         </div>
+      </div>
       <!-- TWITCH END -->
+  <div class="container">
       <!-- Custom Success/Error Message -->
       <div id="custmsgClass" class="row show-hide-message" *ngIf="message && newPost">
         <div [ngClass]="messageClass">
@@ -120,29 +95,29 @@
         <!-- Title Input -->
         <div class="form-group">
           <label for="title">Title</label>
+          <!-- Validation -->
+          <ul class="help-block">
+            <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.required">This field is required.</li>
+            <li *ngIf="(form.controls.title.dirty && form.controls.title.errors?.minlength) || (form.controls.title.dirty && form.controls.title.errors?.maxlength)">Max length: 50, Min length: 5</li>
+            <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.alphaNumericValidation">Must be a letter or number</li>
+          </ul>
           <div [ngClass]="{'has-success': form.controls.title.valid, 'has-error': form.controls.title.dirty && form.controls.title.errors}">
             <!-- Title Input -->
             <input type="text" name="title" class="form-control" placeholder="*Blog Title" autocomplete="off" formControlName="title" />
-            <!-- Validation -->
-            <ul class="help-block">
-              <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.required">This field is required.</li>
-              <li *ngIf="(form.controls.title.dirty && form.controls.title.errors?.minlength) || (form.controls.title.dirty && form.controls.title.errors?.maxlength)">Max length: 50, Min length: 5</li>
-              <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.alphaNumericValidation">Must be a letter or number</li>
-            </ul>
           </div>
         </div>
 
         <!-- Body Input -->
         <div class="form-group">
+          <!-- Validation -->
           <label for="body">Body</label>
+          <ul class="help-block">
+            <li *ngIf="form.controls.body.dirty && form.controls.body.errors?.required">This field is required.</li>
+            <li *ngIf="(form.controls.body.dirty && form.controls.body.errors?.minlength) || (form.controls.body.dirty && form.controls.body.errors?.maxlength)">Max length: 280, Min length: 5</li>
+          </ul>
           <div [ngClass]="{'has-success': form.controls.body.valid, 'has-error': form.controls.body.dirty && form.controls.body.errors}">
             <!-- Body Input -->
-            <textarea name="body" rows="8" cols="80" placeholder="*Body" class="form-control" formControlName="body"></textarea>
-            <!-- Validation -->
-            <ul class="help-block">
-              <li *ngIf="form.controls.body.dirty && form.controls.body.errors?.required">This field is required.</li>
-              <li *ngIf="(form.controls.body.dirty && form.controls.body.errors?.minlength) || (form.controls.body.dirty && form.controls.body.errors?.maxlength)">Max length: 280, Min length: 5</li>
-            </ul>
+            <textarea name="body" rows="8" cols="80" placeholder="*Body" class="form-control" formControlName="body"></textarea>            
           </div>
         </div>
 
@@ -177,26 +152,26 @@
             <!-- <br /> -->
             <div *ngIf="username === blog.createdBy">
               <!-- <strong>Likes: </strong>{{ blog.likes }}
-              <br />
-              <strong>Dislikes: </strong>{{ blog.dislikes }} -->
+<br />
+<strong>Dislikes: </strong>{{ blog.dislikes }} -->
             </div>
 
-      <div class="float-right">
-            <!-- Edit Button -->
-            <a [routerLink]="['/edit-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-info">Edit</button></a>
-            <!-- Delete Button -->
-            <a [routerLink]="['/delete-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-danger">Delete</button></a>
-      </div>
+            <div class="float-right">
+              <!-- Edit Button -->
+              <a [routerLink]="['/edit-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-info">Edit</button></a>
+              <!-- Delete Button -->
+              <a [routerLink]="['/delete-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-danger">Delete</button></a>
+            </div>
             <!-- Likes Dropdown  -->
             <div class="dropdown">
               <!-- Like Button -->
               <!-- <button type="button" name="button" class="btn btn-sm btn-success" *ngIf="username !== blog.createdBy"><span class="glyphicon glyphicon-thumbs-up">&nbsp;</span>Likes: 21</button> -->
               <!-- Dropdown Menu Items -->
               <!-- <div class="dropdown-content">
-                <a href="#">gugui3z24</a>
-                <a href="#">jinder</a>
-                <a href="#">patel</a>
-              </div> -->
+<a href="#">gugui3z24</a>
+<a href="#">jinder</a>
+<a href="#">patel</a>
+</div> -->
             </div>
 
             <!-- Dislikes Dropdown  -->
@@ -205,10 +180,10 @@
               <!-- <button type="button" name="button" class="btn btn-sm btn-warning" *ngIf="username !== blog.createdBy"><span class="glyphicon glyphicon-thumbs-down">&nbsp;</span>Dislikes: 15</button> -->
               <!-- Dropdown Menu Items -->
               <!-- <div class="dropdown-content">
-                <a href="#">gugui3z24</a>
-                <a href="#">jinder</a>
-                <a href="#">patel</a>
-              </div> -->
+<a href="#">gugui3z24</a>
+<a href="#">jinder</a>
+<a href="#">patel</a>
+</div> -->
             </div>
 
           </div>
@@ -220,10 +195,10 @@
               <!-- <button type="button" name="button" class="btn btn-sm btn-danger" (click)="draftComment()">Post Comment</button> -->
               <!-- <br /> -->
               <!-- <form>
-                <textarea name="comment" rows="10" cols="30" class="form-control"></textarea>
-                <button type="button" name="button" class="btn btn-sm btn-info">Submit Post</button>
-                <button type="button" name="button" class="btn btn-sm btn-danger">Cancel</button>
-              </form> -->
+<textarea name="comment" rows="10" cols="30" class="form-control"></textarea>
+<button type="button" name="button" class="btn btn-sm btn-info">Submit Post</button>
+<button type="button" name="button" class="btn btn-sm btn-danger">Cancel</button>
+</form> -->
             </li>
           </ul>
           <!-- Post Comment Box: End -->
@@ -232,7 +207,7 @@
         <!-- Panel Outer Layer -->
       </div>
       <!-- Panel End -->
-
+    </div>
 
       <footer class="text-center">
         <a class="up-arrow" href="#top" data-toggle="tooltip" title="TO TOP">
@@ -240,13 +215,13 @@
         </a><br><br>
         <p>Site Made By <a href="https://github.com/TeamKhonsu/TheKhovfePub" data-toggle="tooltip" title="Visit TeamKhonsu">ThehermitKhan and TeamKhonsu</a></p>
       </footer>
-    <!-- CONTENT END -->
-    <!-- Optional JavaScript -->
-    <!-- Load the Twitch embed script -->
-    <script src="https://embed.twitch.tv/embed/v1.js"></script>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="  crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="./js/main.js"></script>
-  </body>
-</html>
+      <!-- CONTENT END -->
+      <!-- Optional JavaScript -->
+      <!-- Load the Twitch embed script -->
+      <script src="https://embed.twitch.tv/embed/v1.js"></script>
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="  crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      <script src="./js/main.js"></script>
+      </body>
+    </html>
