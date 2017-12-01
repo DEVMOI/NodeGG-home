@@ -70,12 +70,12 @@ footer a:hover {
   color:#fff;
 }
 
-a.navbar-brand,li>a{
+a.navbar-brand,.hover{
   color: #fff;
   margin:0;
 }
-.navbar:hover,li>a:hover{
-  color:#fff;
+.navbar:hover,.hover:hover{
+  color:#000;
   background: inherit;  
   background-color: #000;
 }
