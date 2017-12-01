@@ -31,13 +31,13 @@
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav  navbar-right">
-              <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/">Home</a></li>
-              <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/dashboard">Dashboard</a></li>
-              <li><a *ngIf="authService.loggedIn()" routerLink="/profile">Profile</a></li>
+              <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a class="hover" routerLink="/">Home</a></li>
+              <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a class="hover"  routerLink="/dashboard">Dashboard</a></li>
+              <li class="hover"><a  class="hover" *ngIf="authService.loggedIn()" routerLink="/profile">Profile</a></li>
 
-              <li><a *ngIf="!authService.loggedIn()" routerLink="/login">Login</a></li>
-              <li><a *ngIf="authService.loggedIn()" href="#" (click)="onLogoutClick()">Logout</a></li>
-              <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/register">Register</a></li>
+              <li ><a  class="hover" *ngIf="!authService.loggedIn()" routerLink="/login">Login</a></li>
+              <li class="hover"><a class="hover" *ngIf="authService.loggedIn()" href="#" (click)="onLogoutClick()">Logout</a></li>
+              <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a  class="hover" routerLink="/register">Register</a></li>
             </ul>
           </div>
         </div>
@@ -92,29 +92,14 @@
 
       <!-- New Blog Form -->
       <form [formGroup]="form" name="blogForm" (submit)="onBlogSubmit()" *ngIf="newPost">
-        <!-- Title Input -->
-        <div class="form-group">
-          <label for="title">Title</label>
-          <!-- Validation -->
-          <ul class="help-block">
-            <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.required">This field is required.</li>
-            <li *ngIf="(form.controls.title.dirty && form.controls.title.errors?.minlength) || (form.controls.title.dirty && form.controls.title.errors?.maxlength)">Max length: 50, Min length: 5</li>
-            <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.alphaNumericValidation">Must be a letter or number</li>
-          </ul>
-          <div [ngClass]="{'has-success': form.controls.title.valid, 'has-error': form.controls.title.dirty && form.controls.title.errors}">
-            <!-- Title Input -->
-            <input type="text" name="title" class="form-control" placeholder="*Blog Title" autocomplete="off" formControlName="title" />
-          </div>
-        </div>
-
         <!-- Body Input -->
         <div class="form-group">
           <!-- Validation -->
-          <label for="body">Body</label>
           <ul class="help-block">
             <li *ngIf="form.controls.body.dirty && form.controls.body.errors?.required">This field is required.</li>
             <li *ngIf="(form.controls.body.dirty && form.controls.body.errors?.minlength) || (form.controls.body.dirty && form.controls.body.errors?.maxlength)">Max length: 280, Min length: 5</li>
           </ul>
+          <label for="body">Body</label>
           <div [ngClass]="{'has-success': form.controls.body.valid, 'has-error': form.controls.body.dirty && form.controls.body.errors}">
             <!-- Body Input -->
             <textarea name="body" rows="8" cols="80" placeholder="*Body" class="form-control" formControlName="body"></textarea>            
@@ -136,7 +121,7 @@
 
           <!-- Panel Title -->
           <div class="panel-heading">
-            <h3 class="panel-title">{{ blog.title }}</h3>
+            <h3 class="text-right panel-title">{{ blog.createdBy }}</h3>
           </div>
 
           <!-- Panel Body -->
@@ -146,8 +131,6 @@
 
           <!-- Panel Footer Start -->
           <div class="panel-footer">
-            <strong>Posted by: </strong>{{ blog.createdBy }}
-            <br />
             <strong>Date: </strong>{{ blog.createdAt | date:'MMM dd, yyyy' }}
             <!-- <br /> -->
             <div *ngIf="username === blog.createdBy">
