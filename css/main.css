@@ -1,0 +1,195 @@
+/*OVERALL CSS*/
+body{
+  font-family: 'Merriweather', serif;
+}
+/*HEADER CSS*/
+header{
+  overflow: hidden;
+  background-image:url("https://media.giphy.com/media/xUA7aW1ddSxtVT5zzi/giphy.gif");
+  background-size: cover;
+  background-position: bottom;
+  margin:0;
+}
+
+/*FOOTER CSS*/
+footer {
+  /* Add a dark background color to the footer */
+  background-color: #2d2d30;
+  color: #f5f5f5;
+  padding: 5px;
+  margin: 0;
+}
+
+footer a {
+  color: #f5f5f5;
+}
+
+footer a:hover {
+  color: #777;
+  text-decoration: none;
+}
+
+
+
+
+
+
+/*IDS*/
+#Twitch{
+  margin-left: auto;
+  margin-right: auto;
+}
+#twitch-embed {
+  height: 150px;
+
+  margin: 0 0 100px;
+  padding: 0;
+  
+  border: #000 solid 10px; 
+}
+/*Custom Message Class*/
+#custmsgClass{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#goBack, #submit {
+  margin-bottom: 15px;
+}
+
+
+
+
+
+
+/*Class*/
+.navbar{
+  margin: 0;
+  border-radius: 0;
+  color:#fff;
+}
+
+a.navbar-brand,li>a{
+  color: #fff;
+  margin:0;
+}
+.navbar:hover,li>a:hover{
+  color:#fff;
+  background: inherit;  
+  background-color: #000;
+}
+.jumboHome{
+  display: block;
+  padding: 100px 0;
+}
+/*jumbotron styling*/
+.jumboHome h1{
+  margin: 0 auto;
+  text-align: center;
+  font-family: 'Libre Barcode 39 Text', cursive;
+  color: #fff;
+  padding: 25px;
+  opacity: 100;
+}
+
+.up-arrow{
+  padding: 0;
+  margin: 0;
+}
+/* Dropdown Button */
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+}
+
+
+
+
+
+
+/*MEDIA QUERIES*/
+@media only screen and (max-width: 320px) {
+/*
+  .jumboHome {
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+
+    height:200px;
+}*/
+
+
+
+}
+
+@media only screen and (max-width: 900px) {
+
+
+  #newPost{
+    float: left;
+  }
+  #reload{
+    float: right;
+  }
+}
+@media only screen and (min-width: 720px) {
+  #twitch-embed {
+    height: 400px;
+    width: 600px;
+    margin: 50px auto 25px;
+    padding: 0;
+  }
+  /*
+  .jumboHome {
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+
+  height:400px;
+}*/ 
+  .jumboHome h1{
+    padding: 75px;
+  }
+
+}

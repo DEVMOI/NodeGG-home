@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+39+Text|Merriweather" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/main.css" type="text/css" />
+  </head>
+  
+  <body>
+<!--    HEADER-->
+    <header id="top">
+      <!-- NAVBAR -->
+      <nav class="navbar">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <div class="navbar-inverse">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              </button>
+            </div>
+            
+            <a class="navbar-brand" routerLink="/home"> NodeGG </a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav  navbar-right">
+              <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/">Home</a></li>
+              <li *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/dashboard">Dashboard</a></li>
+              <li><a *ngIf="authService.loggedIn()" routerLink="/profile">Profile</a></li>
+
+              <li><a *ngIf="!authService.loggedIn()" routerLink="/login">Login</a></li>
+              <li><a *ngIf="authService.loggedIn()" href="#" (click)="onLogoutClick()">Logout</a></li>
+              <li *ngIf="!authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"><a routerLink="/register">Register</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!-- NAVBAR END -->
+
+<!--    HEADER END-->
+    <!-- Wrap -->
+    <!-- JUMBOTRON -->
+    <div class="jumboHome" >
+
+      <h1>NodeGG</h1>
+
+    </div>
+    <!-- JUMBOTRON END -->
+  </header>
+    <!-- Wrap -->
+    
+      
+      <!-- TWITCH -->
+      <div id="Twitch">  
+        <div class="twitch">
+          <div id="twitch-embed" class="container-fluid"></div>
+          <!-- <div class="twitch-chat">
+            <iframe frameborder="0"
+            scrolling="no"
+            id="chat embed"
+            src="http://www.twitch.tv/relaxbeats/chat"
+            height=100%
+            width="100%">
+            </iframe>
+            </div> -->
+        </div>
+      </div>
+      <!-- TWITCH END -->
+  <div class="container">
+      <!-- Custom Success/Error Message -->
+      <div id="custmsgClass" class="row show-hide-message" *ngIf="message && newPost">
+        <div [ngClass]="messageClass">
+          {{ message }}
+        </div>
+      </div>
+
+      <!-- New Post Button -->
+      <button id="newPost" type="button" name="button" class="btn btn-warning" *ngIf="!newPost" (click)="newBlogForm()">New Post</button>
+
+      <!-- Reload Button -->
+      <button id="reload" [disabled]="loadingBlogs" type="button" name="button" class="btn btn-default" *ngIf="!newPost" (click)="reloadBlogs()"><span class="glyphicon glyphicon-repeat"></span>&nbsp;&nbsp;Reload</button>
+
+      <br />
+      <br />
+
+      <!-- New Blog Form -->
+      <form [formGroup]="form" name="blogForm" (submit)="onBlogSubmit()" *ngIf="newPost">
+        <!-- Title Input -->
+        <div class="form-group">
+          <label for="title">Title</label>
+          <!-- Validation -->
+          <ul class="help-block">
+            <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.required">This field is required.</li>
+            <li *ngIf="(form.controls.title.dirty && form.controls.title.errors?.minlength) || (form.controls.title.dirty && form.controls.title.errors?.maxlength)">Max length: 50, Min length: 5</li>
+            <li *ngIf="form.controls.title.dirty && form.controls.title.errors?.alphaNumericValidation">Must be a letter or number</li>
+          </ul>
+          <div [ngClass]="{'has-success': form.controls.title.valid, 'has-error': form.controls.title.dirty && form.controls.title.errors}">
+            <!-- Title Input -->
+            <input type="text" name="title" class="form-control" placeholder="*Blog Title" autocomplete="off" formControlName="title" />
+          </div>
+        </div>
+
+        <!-- Body Input -->
+        <div class="form-group">
+          <!-- Validation -->
+          <label for="body">Body</label>
+          <ul class="help-block">
+            <li *ngIf="form.controls.body.dirty && form.controls.body.errors?.required">This field is required.</li>
+            <li *ngIf="(form.controls.body.dirty && form.controls.body.errors?.minlength) || (form.controls.body.dirty && form.controls.body.errors?.maxlength)">Max length: 280, Min length: 5</li>
+          </ul>
+          <div [ngClass]="{'has-success': form.controls.body.valid, 'has-error': form.controls.body.dirty && form.controls.body.errors}">
+            <!-- Body Input -->
+            <textarea name="body" rows="8" cols="80" placeholder="*Body" class="form-control" formControlName="body"></textarea>            
+          </div>
+        </div>
+
+        <!-- Go Back Button -->
+        <button id="goBack" [disabled]="processing" type="button" name="button" (click)="goBack()" class="btn btn-warning">Go Back</button>
+        <!-- Submit Button -->
+        <button id="submit" [disabled]="processing || !form.valid" type="submit" name="button" class="btn btn-success">Submit</button>
+
+      </form>
+      <!-- New Blog Form -->
+
+      <!-- Panel Start -->
+      <div *ngIf="!newPost">
+        <!-- Panel Outer Layer -->
+        <div class="panel panel-primary" *ngFor="let blog of blogPosts">
+
+          <!-- Panel Title -->
+          <div class="panel-heading">
+            <h3 class="panel-title">{{ blog.title }}</h3>
+          </div>
+
+          <!-- Panel Body -->
+          <div class="panel-body">
+            {{ blog.body }}
+          </div>
+
+          <!-- Panel Footer Start -->
+          <div class="panel-footer">
+            <strong>Posted by: </strong>{{ blog.createdBy }}
+            <br />
+            <strong>Date: </strong>{{ blog.createdAt | date:'MMM dd, yyyy' }}
+            <!-- <br /> -->
+            <div *ngIf="username === blog.createdBy">
+              <!-- <strong>Likes: </strong>{{ blog.likes }}
+<br />
+<strong>Dislikes: </strong>{{ blog.dislikes }} -->
+            </div>
+
+            <div class="float-right">
+              <!-- Edit Button -->
+              <a [routerLink]="['/edit-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-info">Edit</button></a>
+              <!-- Delete Button -->
+              <a [routerLink]="['/delete-blog/', blog._id]" *ngIf="username === blog.createdBy"><button type="button" name="button" class="btn btn-sm btn-danger">Delete</button></a>
+            </div>
+            <!-- Likes Dropdown  -->
+            <div class="dropdown">
+              <!-- Like Button -->
+              <!-- <button type="button" name="button" class="btn btn-sm btn-success" *ngIf="username !== blog.createdBy"><span class="glyphicon glyphicon-thumbs-up">&nbsp;</span>Likes: 21</button> -->
+              <!-- Dropdown Menu Items -->
+              <!-- <div class="dropdown-content">
+<a href="#">gugui3z24</a>
+<a href="#">jinder</a>
+<a href="#">patel</a>
+</div> -->
+            </div>
+
+            <!-- Dislikes Dropdown  -->
+            <div class="dropdown">
+              <!-- Dislike Button -->
+              <!-- <button type="button" name="button" class="btn btn-sm btn-warning" *ngIf="username !== blog.createdBy"><span class="glyphicon glyphicon-thumbs-down">&nbsp;</span>Dislikes: 15</button> -->
+              <!-- Dropdown Menu Items -->
+              <!-- <div class="dropdown-content">
+<a href="#">gugui3z24</a>
+<a href="#">jinder</a>
+<a href="#">patel</a>
+</div> -->
+            </div>
+
+          </div>
+          <!-- Panel Footer End -->
+
+          <!-- Post Comment Box: Start -->
+          <ul class="list-group">
+            <li class="list-group-item">
+              <!-- <button type="button" name="button" class="btn btn-sm btn-danger" (click)="draftComment()">Post Comment</button> -->
+              <!-- <br /> -->
+              <!-- <form>
+<textarea name="comment" rows="10" cols="30" class="form-control"></textarea>
+<button type="button" name="button" class="btn btn-sm btn-info">Submit Post</button>
+<button type="button" name="button" class="btn btn-sm btn-danger">Cancel</button>
+</form> -->
+            </li>
+          </ul>
+          <!-- Post Comment Box: End -->
+
+        </div>
+        <!-- Panel Outer Layer -->
+      </div>
+      <!-- Panel End -->
+    </div>
+
+      <footer class="text-center">
+        <a class="up-arrow" href="#top" data-toggle="tooltip" title="TO TOP">
+          <span class="glyphicon glyphicon-chevron-up"></span>
+        </a><br><br>
+        <p>Site Made By <a href="https://github.com/TeamKhonsu/TheKhovfePub" data-toggle="tooltip" title="Visit TeamKhonsu">ThehermitKhan and TeamKhonsu</a></p>
+      </footer>
+      <!-- CONTENT END -->
+      <!-- Optional JavaScript -->
+      <!-- Load the Twitch embed script -->
+      <script src="https://embed.twitch.tv/embed/v1.js"></script>
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="  crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      <script src="./js/main.js"></script>
+      </body>
+    </html>
